@@ -1,41 +1,47 @@
 from datetime import datetime
 import streamlit as st
 
-# Configure the Streamlit page
+# Configure Streamlit Page
 st.set_page_config(
     page_title="RentProof — Renter Condition & Repair Tracker",
     page_icon="🏠",
     layout="wide",
 )
 
-# Custom CSS for modern styling, clean cards, and nice typography
+# Stunning Modern UI Styling (Custom CSS)
 st.markdown(
     """
     <style>
     .main {
-        background-color: #f8fafc;
+        background-color: #f1f5f9;
     }
     .stMetric {
         background-color: #ffffff;
-        padding: 15px;
-        border-radius: 12px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        padding: 16px;
+        border-radius: 14px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
         border: 1px solid #e2e8f0;
     }
-    .css-1544g2n {
-        padding-top: 2rem;
-    }
     div.stButton > button {
-        background-color: #2563eb;
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
         color: white;
-        border-radius: 8px;
-        padding: 0.5rem 1rem;
+        border-radius: 10px;
+        padding: 0.6rem 1.2rem;
         font-weight: 600;
         border: none;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        transition: all 0.3s ease;
     }
     div.stButton > button:hover {
-        background-color: #1d4ed8;
+        background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+        box-shadow: 0 6px 15px rgba(37, 99, 235, 0.3);
         color: white;
+    }
+    .stExpander {
+        background-color: #ffffff;
+        border-radius: 10px;
+        border: 1px solid #e2e8f0;
+        margin-bottom: 10px;
     }
     </style>
 """,
@@ -44,41 +50,42 @@ st.markdown(
 
 # Initialize Session State
 if "property_name" not in st.session_state:
-    st.session_state.property_name = "Apartment 4B, Maple Street"
+  st.session_state.property_name = "Apartment 4B, Maple Street"
 if "rooms" not in st.session_state:
-    st.session_state.rooms = [
-        {"name": "Living Room", "condition": "Clean, minor scuff on baseboard"},
-        {"name": "Kitchen", "condition": "Good, small scratch on counter"},
-    ]
+  st.session_state.rooms = [
+      {"name": "Living Room", "condition": "Clean, minor scuff on baseboard"},
+      {"name": "Kitchen", "condition": "Good, small scratch on counter"},
+  ]
 if "issues" not in st.session_state:
-    st.session_state.issues = [
-        {
-            "id": 1,
-            "room": "Kitchen",
-            "title": "Leaking faucet under sink",
-            "date": "2026-10-15",
-            "status": "In Progress",
-            "notes": "Notified landlord via WhatsApp.",
-        }
-    ]
+  st.session_state.issues = [
+      {
+          "id": 1,
+          "room": "Kitchen",
+          "title": "Leaking faucet under sink",
+          "reporter": "Sarah Jenkins",
+          "contact": "+1 (555) 019-2834",
+          "date": "2026-10-15",
+          "status": "In Progress",
+          "notes": "Notified landlord via WhatsApp.",
+      }
+  ]
 
-# App Header with nicer visual presentation
+# App Header
 st.title("🏠 RentProof")
 st.markdown(
-    "##### *Your independent record for rental conditions, maintenance, and"
-    " landlord chats.*"
+    "##### ✨ *Your independent record for rental conditions, maintenance logs,"
+    " and direct contacts.*"
 )
 st.divider()
 
-# Sidebar Navigation with friendly icons
-st.sidebar.markdown("### 🧭 Menu")
+# Sleek Sidebar Navigation
+st.sidebar.markdown("### 🧭 Navigation Menu")
 menu = st.sidebar.radio(
     "Go to",
     ["📊 Dashboard", "🚪 Inspection Checklist", "🛠️ Maintenance Issues"],
     label_visibility="collapsed",
 )
 
-# Clean up sidebar text selection
 if "📊 Dashboard" in menu:
   menu = "Dashboard"
 elif "🚪 Inspection Checklist" in menu:
@@ -90,31 +97,25 @@ else:
 # 1. DASHBOARD
 # ---------------------------------------------------------
 if menu == "Dashboard":
-  st.header(f"📍 Property Overview")
+  st.header("📍 Property Overview")
   st.subheader(f"*{st.session_state.property_name}*")
-  format_space = st.empty()
 
   col1, col2, col3 = st.columns(3)
   with col1:
-    st.metric(
-        label="🚪 Total Rooms Tracked", value=len(st.session_state.rooms)
-    )
+    st.metric(label="🚪 Total Rooms Tracked", value=len(st.session_state.rooms))
   with col2:
     open_issues = sum(
         1 for i in st.session_state.issues if i["status"] != "Resolved"
     )
     st.metric(label="⚠️ Active Issues", value=open_issues)
   with col3:
-    st.metric(label="✅ Status", value="Protected 🛡️")
+    st.metric(label="✅ System Status", value="Protected 🛡️")
 
   st.write("")
   st.subheader("⏱️ Recent Activity & Timeline")
 
   if not st.session_state.issues:
-    st.info(
-        "No maintenance issues logged yet. Head over to the Maintenance tab to"
-        " add one!"
-    )
+    st.info("No maintenance issues logged yet.")
   else:
     for issue in st.session_state.issues:
       status_color = (
@@ -126,22 +127,22 @@ if menu == "Dashboard":
           f"{status_color} [{issue['status']}] {issue['title']} —"
           f" *{issue['room']}*"
       ):
+        st.write(f"👤 **Reported By:** {issue['reporter']}")
+        st.write(f"📞 **Contact Number:** `{issue['contact']}`")
         st.write(f"📅 **Logged Date:** {issue['date']}")
-        st.write(f"📝 **Notes & History:** {issue['notes']}")
+        st.write(f"📝 **Details & Notes:** {issue['notes']}")
 
   st.divider()
-
-  col_report1, col_report2 = st.columns([2, 1])
-  with col_report1:
-    st.markdown("### Need to share your records?")
+  col_rep1, col_rep2 = st.columns([2, 1])
+  with col_rep1:
+    st.markdown("### 📄 Need an official report?")
     st.write(
-        "Generate a clean, official timeline PDF report of all your checked"
-        " rooms and unresolved issues to send to your landlord or housing"
-        " authority."
+        "Compile your room checklist, communication history, and issue details"
+        " into a professional timestamped summary."
     )
-  with col_report2:
+  with col_rep2:
     if st.button("📥 Download PDF Report"):
-      st.success("Report successfully compiled and downloaded! 🎉")
+      st.success("Report successfully generated! 🎉")
 
 # ---------------------------------------------------------
 # 2. INSPECTION CHECKLIST
@@ -149,30 +150,44 @@ if menu == "Dashboard":
 elif menu == "Inspection Checklist":
   st.header("🚪 Room-by-Room Inspection Checklist")
   st.write(
-      "Document the exact condition of each room when you move in so there's"
-      " never a dispute later."
+      "Log move-in conditions clearly to protect your deposit and establish a"
+      " verified timeline."
   )
 
   with st.form("add_room_form", clear_on_submit=True):
-    st.subheader("➕ Add a New Room")
+    st.subheader("➕ Add Room & Inspector Details")
+
+    col_a, col_b = st.columns(2)
+    with col_a:
+      inspector_name = st.text_input(
+          "Your Name", placeholder="e.g., Alex Johnson"
+      )
+    with col_b:
+      inspector_contact = st.text_input(
+          "Contact Number / WhatsApp", placeholder="e.g., +1 555-0199"
+      )
+
     new_room_name = st.text_input(
-        "Room Name", placeholder="e.g., Master Bedroom, Guest Bathroom"
+        "Room Name", placeholder="e.g., Master Bedroom, Kitchen"
     )
     new_room_condition = st.text_area(
         "Condition Notes",
-        placeholder="e.g., Walls are freshly painted, minor scratch near door"
-        " frame.",
+        placeholder="e.g., Clean floors, minor scuff on left baseboard.",
     )
     uploaded_photo = st.file_uploader(
-        "Upload Photo Evidence", type=["jpg", "png", "jpeg"]
+        "Upload Condition Photo", type=["jpg", "png", "jpeg"]
     )
+
     submitted = st.form_submit_button("Save Room Record")
 
-    if submitted and new_room_name:
+    if submitted and new_room_name and inspector_name:
       st.session_state.rooms.append(
-          {"name": new_room_name, "condition": new_room_condition}
+          {
+              "name": new_room_name,
+              "condition": f"{new_room_condition} (Inspected by: {inspector_name} - {inspector_contact})",
+          }
       )
-      st.success(f"Successfully added {new_room_name} to your records! ✨")
+      st.success(f"Successfully recorded {new_room_name}! ✨")
 
   st.divider()
   st.subheader("📋 Current Property Records")
@@ -183,8 +198,7 @@ elif menu == "Inspection Checklist":
     for room in st.session_state.rooms:
       with st.container():
         st.markdown(f"### 🏠 {room['name']}")
-        st.info(f"**Condition Notes:** {room['condition']}")
-        st.write("")
+        st.info(f"**Condition & Inspector Info:** {room['condition']}")
 
 # ---------------------------------------------------------
 # 3. MAINTENANCE ISSUES
@@ -192,41 +206,55 @@ elif menu == "Inspection Checklist":
 elif menu == "Maintenance Issues":
   st.header("🛠️ Maintenance Issue Log")
   st.write(
-      "Keep an objective timeline of problems, when you reported them, and how"
-      " the landlord responded."
+      "Easily document problems, attach contact details, and maintain an"
+      " objective repair trail."
   )
 
   with st.form("add_issue_form", clear_on_submit=True):
-    st.subheader("📝 Log a New Problem")
+    st.subheader("📝 Report a New Problem")
+
+    col_1, col_2 = st.columns(2)
+    with col_1:
+      reporter_name = st.text_input(
+          "Your Name / Tenant Name", placeholder="e.g., Sarah Jenkins"
+      )
+    with col_2:
+      reporter_contact = st.text_input(
+          "Your Phone / WhatsApp", placeholder="e.g., +1 (555) 019-2834"
+      )
+
     issue_room = st.selectbox(
         "Select Room", [r["name"] for r in st.session_state.rooms]
     )
     issue_title = st.text_input(
-        "Issue Summary", placeholder="e.g., AC unit leaking water in bedroom"
+        "Issue Summary", placeholder="e.g., Leaking faucet under sink"
     )
     issue_status = st.selectbox(
         "Current Status", ["Open", "In Progress", "Resolved"]
     )
     issue_notes = st.text_area(
-        "Communication & Details",
-        placeholder="e.g., Sent WhatsApp photo to property manager at 2:00 PM.",
+        "Communication & Landlord Response",
+        placeholder="e.g., Sent photo via WhatsApp, awaiting plumber callback.",
     )
+
     issue_submitted = st.form_submit_button("Log Maintenance Issue")
 
-    if issue_submitted and issue_title:
+    if issue_submitted and issue_title and reporter_name:
       new_issue = {
           "id": len(st.session_state.issues) + 1,
           "room": issue_room,
           "title": issue_title,
+          "reporter": reporter_name,
+          "contact": reporter_contact,
           "date": datetime.today().strftime("%Y-%m-%d"),
           "status": issue_status,
           "notes": issue_notes,
       }
       st.session_state.issues.append(new_issue)
-      st.success("Issue successfully logged to your timeline! 🚀")
+      st.success("Maintenance issue successfully logged with your contact! 🚀")
 
   st.divider()
-  st.subheader("📜 Maintenance History")
+  st.subheader("📜 Maintenance History & Contact Directory")
 
   if not st.session_state.issues:
     st.info("No maintenance issues recorded.")
@@ -242,7 +270,9 @@ elif menu == "Maintenance Issues":
           f" &nbsp;&nbsp;&nbsp;&nbsp; Status: {status_badge}"
       )
       st.caption(
-          f"📅 Reported on: {issue['date']} &nbsp;|&nbsp; 💬 Details:"
-          f" {issue['notes']}"
+          f"👤 **Reported By:** {issue.get('reporter', 'N/A')} &nbsp;|&nbsp; 📞"
+          f" **Contact:** `{issue.get('contact', 'N/A')}` &nbsp;|&nbsp; 📅"
+          f" **Date:** {issue['date']}"
       )
+      st.write(f"💬 **Notes:** {issue['notes']}")
       st.divider()
