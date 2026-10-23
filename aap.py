@@ -15,11 +15,15 @@ st.markdown(
     .main {
         background-color: #f1f5f9;
     }
+    /* Force dark, clear text inside expanders and body */
+    .stExpander, .stExpander p, .stExpander span, .stExpander div {
+        color: #1e293b !important;
+    }
     .stMetric {
         background-color: #ffffff;
         padding: 16px;
         border-radius: 14px;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
         border: 1px solid #e2e8f0;
     }
     div.stButton > button {
@@ -29,19 +33,6 @@ st.markdown(
         padding: 0.6rem 1.2rem;
         font-weight: 600;
         border: none;
-        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
-        transition: all 0.3s ease;
-    }
-    div.stButton > button:hover {
-        background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
-        box-shadow: 0 6px 15px rgba(37, 99, 235, 0.3);
-        color: white;
-    }
-    .stExpander {
-        background-color: #ffffff;
-        border-radius: 10px;
-        border: 1px solid #e2e8f0;
-        margin-bottom: 10px;
     }
     </style>
 """,
