@@ -8,11 +8,10 @@ st.set_page_config(
     layout="wide",
 )
 
-# Custom UI Styling
+# Custom UI Styling to ensure metric cards and text are crystal clear
 st.markdown(
     """
     <style>
-    /* Fix metric cards background and text colors */
     .stMetric {
         background-color: #ffffff !important;
         padding: 16px;
@@ -118,7 +117,7 @@ if menu == "Dashboard":
   if not st.session_state.issues:
     st.info("No maintenance issues logged yet.")
   else:
-    for issue in st.session_state.issues:
+    for idx, issue in enumerate(st.session_state.issues):
       status_color = (
           "🟡"
           if issue["status"] == "In Progress"
@@ -132,6 +131,11 @@ if menu == "Dashboard":
         st.write(f"📞 **Contact Number:** `{issue['contact']}`")
         st.write(f"📅 **Logged Date:** {issue['date']}")
         st.write(f"📝 **Details & Notes:** {issue['notes']}")
+
+        # Delete button for each issue
+        if st.button("🗑️ Remove / Clear Issue", key=f"del_issue_{idx}"):
+          st.session_state.issues.pop(idx)
+          st.rerun()
 
   st.divider()
   col_rep1, col_rep2 = st.columns([2, 1])
@@ -197,10 +201,13 @@ elif menu == "Inspection Checklist":
   if not st.session_state.rooms:
     st.info("No rooms added yet.")
   else:
-    for room in st.session_state.rooms:
+    for idx, room in enumerate(st.session_state.rooms):
       with st.container():
         st.markdown(f"### 🏠 {room['name']}")
         st.info(f"**Condition & Inspector Info:** {room['condition']}")
+        if st.button("🗑️ Remove Room", key=f"del_room_{idx}"):
+          st.session_state.rooms.pop(idx)
+          st.rerun()
 
 # ---------------------------------------------------------
 # 3. MAINTENANCE ISSUES
@@ -226,7 +233,10 @@ elif menu == "Maintenance Issues":
       )
 
     issue_room = st.selectbox(
-        "Select Room", [r["name"] for r in st.session_state.rooms]
+        "Select Room",
+        [r["name"] for r in st.session_state.rooms]
+        if st.session_state.rooms
+        else ["General"],
     )
     issue_title = st.text_input(
         "Issue Summary", placeholder="e.g., Leaking faucet under sink"
@@ -261,7 +271,7 @@ elif menu == "Maintenance Issues":
   if not st.session_state.issues:
     st.info("No maintenance issues recorded.")
   else:
-    for issue in st.session_state.issues:
+    for idx, issue in enumerate(st.session_state.issues):
       status_badge = (
           f"`{issue['status']}`"
           if issue["status"] == "Open"
@@ -277,4 +287,7 @@ elif menu == "Maintenance Issues":
           f" **Date:** {issue['date']}"
       )
       st.write(f"💬 **Notes:** {issue['notes']}")
+      if st.button("🗑️ Delete This Issue Record", key=f"del_log_{idx}"):
+        st.session_state.issues.pop(idx)
+        st.rerun()
       st.divider()
