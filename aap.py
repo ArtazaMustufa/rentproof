@@ -12,12 +12,21 @@ st.set_page_config(
 st.markdown(
     """
     <style>
+    /* Fix metric cards background and text colors */
     .stMetric {
-        background-color: #ffffff;
+        background-color: #ffffff !important;
         padding: 16px;
         border-radius: 14px;
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
         border: 1px solid #e2e8f0;
+    }
+    .stMetric label, .stMetric [data-testid="stMetricLabel"] p {
+        color: #475569 !important;
+        font-weight: 500 !important;
+    }
+    .stMetric [data-testid="stMetricValue"] {
+        color: #0f172a !important;
+        font-weight: 700 !important;
     }
     div.stButton > button {
         background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
