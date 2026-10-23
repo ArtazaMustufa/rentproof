@@ -48,9 +48,9 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# Initialize Session State
+# Initialize Session State for Dynamic Customization
 if "property_name" not in st.session_state:
-  st.session_state.property_name = "Apartment 4B, Maple Street"
+  st.session_state.property_name = "My Rental Property"
 if "rooms" not in st.session_state:
   st.session_state.rooms = [
       {"name": "Living Room", "condition": "Clean, minor scuff on baseboard"},
@@ -62,8 +62,8 @@ if "issues" not in st.session_state:
           "id": 1,
           "room": "Kitchen",
           "title": "Leaking faucet under sink",
-          "reporter": "Sarah Jenkins",
-          "contact": "+1 (555) 019-2834",
+          "reporter": "Tenant",
+          "contact": "Not Provided",
           "date": "2026-10-15",
           "status": "In Progress",
           "notes": "Notified landlord via WhatsApp.",
@@ -78,7 +78,15 @@ st.markdown(
 )
 st.divider()
 
-# Sleek Sidebar Navigation
+# Sleek Sidebar Navigation & Property Customization
+st.sidebar.markdown("### ⚙️ Property Setup")
+user_property_input = st.sidebar.text_input(
+    "Enter Your Apartment / Property Name", value=st.session_state.property_name
+)
+if user_property_input:
+  st.session_state.property_name = user_property_input
+
+st.sidebar.markdown("---")
 st.sidebar.markdown("### 🧭 Navigation Menu")
 menu = st.sidebar.radio(
     "Go to",
@@ -138,7 +146,8 @@ if menu == "Dashboard":
     st.markdown("### 📄 Need an official report?")
     st.write(
         "Compile your room checklist, communication history, and issue details"
-        " into a professional timestamped summary."
+        " into a professional timestamped summary for "
+        f"*{st.session_state.property_name}*."
     )
   with col_rep2:
     if st.button("📥 Download PDF Report"):
@@ -150,8 +159,8 @@ if menu == "Dashboard":
 elif menu == "Inspection Checklist":
   st.header("🚪 Room-by-Room Inspection Checklist")
   st.write(
-      "Log move-in conditions clearly to protect your deposit and establish a"
-      " verified timeline."
+      f"Log move-in conditions for **{st.session_state.property_name}** clearly"
+      " to protect your deposit."
   )
 
   with st.form("add_room_form", clear_on_submit=True):
@@ -160,7 +169,7 @@ elif menu == "Inspection Checklist":
     col_a, col_b = st.columns(2)
     with col_a:
       inspector_name = st.text_input(
-          "Your Name", placeholder="e.g., Alex Johnson"
+          "Your Full Name", placeholder="e.g., Alex Johnson"
       )
     with col_b:
       inspector_contact = st.text_input(
@@ -206,7 +215,7 @@ elif menu == "Inspection Checklist":
 elif menu == "Maintenance Issues":
   st.header("🛠️ Maintenance Issue Log")
   st.write(
-      "Easily document problems, attach contact details, and maintain an"
+      "Easily document problems, attach your contact details, and maintain an"
       " objective repair trail."
   )
 
@@ -216,7 +225,7 @@ elif menu == "Maintenance Issues":
     col_1, col_2 = st.columns(2)
     with col_1:
       reporter_name = st.text_input(
-          "Your Name / Tenant Name", placeholder="e.g., Sarah Jenkins"
+          "Your Name", placeholder="e.g., Sarah Jenkins"
       )
     with col_2:
       reporter_contact = st.text_input(
