@@ -8,22 +8,10 @@ st.set_page_config(
     layout="wide",
 )
 
-# Stunning Modern UI Styling (Custom CSS)
+# Custom UI Styling
 st.markdown(
     """
     <style>
-    .main {
-        background-color: #f1f5f9;
-    }
-    /* Force high-contrast dark text everywhere inside the app body */
-    p, span, label, div, h1, h2, h3, h4, h5, h6 {
-        color: #0f172a !important;
-    }
-    /* Specifically fix expander header text so it's super clear and dark */
-    .streamlit-expanderHeader p {
-        color: #0f172a !important;
-        font-weight: 600 !important;
-    }
     .stMetric {
         background-color: #ffffff;
         padding: 16px;
