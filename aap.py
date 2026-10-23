@@ -15,9 +15,14 @@ st.markdown(
     .main {
         background-color: #f1f5f9;
     }
-    /* Force dark, clear text inside expanders and body */
-    .stExpander, .stExpander p, .stExpander span, .stExpander div {
-        color: #1e293b !important;
+    /* Force high-contrast dark text everywhere inside the app body */
+    p, span, label, div, h1, h2, h3, h4, h5, h6 {
+        color: #0f172a !important;
+    }
+    /* Specifically fix expander header text so it's super clear and dark */
+    .streamlit-expanderHeader p {
+        color: #0f172a !important;
+        font-weight: 600 !important;
     }
     .stMetric {
         background-color: #ffffff;
@@ -28,7 +33,7 @@ st.markdown(
     }
     div.stButton > button {
         background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-        color: white;
+        color: white !important;
         border-radius: 10px;
         padding: 0.6rem 1.2rem;
         font-weight: 600;
