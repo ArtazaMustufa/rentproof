@@ -111,32 +111,6 @@ if menu == "Dashboard":
   with col3:
     st.metric(label="✅ System Status", value="Protected 🛡️")
 
-  st.write("")
-  st.subheader("⏱️ Recent Activity & Timeline")
-
-  if not st.session_state.issues:
-    st.info("No maintenance issues logged yet.")
-  else:
-    for idx, issue in enumerate(st.session_state.issues):
-      status_color = (
-          "🟡"
-          if issue["status"] == "In Progress"
-          else ("🟢" if issue["status"] == "Resolved" else "🔴")
-      )
-      with st.expander(
-          f"{status_color} [{issue['status']}] {issue['title']} —"
-          f" *{issue['room']}*"
-      ):
-        st.write(f"👤 **Reported By:** {issue['reporter']}")
-        st.write(f"📞 **Contact Number:** `{issue['contact']}`")
-        st.write(f"📅 **Logged Date:** {issue['date']}")
-        st.write(f"📝 **Details & Notes:** {issue['notes']}")
-
-        # Delete button for each issue
-        if st.button("🗑️ Remove / Clear Issue", key=f"del_issue_{idx}"):
-          st.session_state.issues.pop(idx)
-          st.rerun()
-
   st.divider()
   col_rep1, col_rep2 = st.columns([2, 1])
   with col_rep1:
